@@ -1,6 +1,7 @@
-// sudoku checker, will be made into full sudoku game
+// sudoku checker
 
-let sampleSudoku= [ [0,1,2,3,4,5,6,7,8],
+let sampleSudoku= [ 
+[0,1,2,3,4,5,6,7,8],
 [0,1,2,3,4,5,6,7,8],
 [0,1,2,3,4,5,6,7,8],
 [0,1,2,3,4,5,6,7,8],
@@ -9,34 +10,36 @@ let sampleSudoku= [ [0,1,2,3,4,5,6,7,8],
 [0,1,2,3,4,5,6,7,8],
 [0,1,2,3,4,5,6,7,8],
 [0,1,2,3,4,5,6,7,8] ];
-// grab the first row using the index
-function getRow(puzzle, row) {
+
+
+function getRow(puzzle, row) {    // grab the first row using row index
     return puzzle[row];
   }
   
-  function getColumn(puzzle, col) {
-    let colArr = [];
-  
-    for (let i = 0; i < puzzle.length; i++) {
-        let row= puzzle[i];
-        let element = row[col]
-      colArr.push(element);
-    }
-    console.log("console sample column " + colArr);
-    return colArr;
-  }
+function getColumn(puzzle, col) {   // get the column using column index
+  let colArr = [];   // final column that is returned
 
-  getColumn(sampleSudoku,3);
-  // grab section in a specified x, y coordinate  ???
+  for (let i = 0; i < puzzle.length; i++) {
+      let row = puzzle[i];   // grab the row
+      let element = row[col];  // the row at given element col is part of our column
+    colArr.push(element);     // push that element to the array we will return
+  }
+  console.log("console sample column " + colArr);
+  return colArr;    // return le array representing column
+}
+
+  getColumn(sampleSudoku, 3);
+  // grab section in a specified x, y coordinate
   function getSection(puzzle, x, y) {
-    x *= 3;
+    x *= 3;  // 0 becomes 0 (0 to 2), 1 becomes 3 (3 to 5), 2 becomes 6 (6 to 9)
     y *= 3;
   
-    let section = [];
+    let section = [];   // return the array of the section
   
-    for (let i = x; i < x + 3; i++) {
-      for (let j = y; j < y + 3; j++) {
-        section.push(puzzle[j][i]);
+    for (let i = x; i < x + 3; i++) {   // iterate through the rows
+      // let row = puzzle[i];
+      for (let j = y; j < y + 3; j++) {   // iterate through each element of the rows
+        section.push(puzzle[j][i]);   // or the reverse? puzzle[i][j] ?
       }
     }
   
@@ -47,9 +50,9 @@ function getRow(puzzle, row) {
 
 
   //-------------- check if the puzzle is valid and only has one of each digit of 1-9function includes1to9(arr) {
-    function includes1to9(arr) {
+    function includes1to9(arr) {   // mini function that checks if there is 1 to 9
         for (let i = 1; i <= arr.length; i++) {
-          if (arr.indexOf(i) === -1) {
+          if (arr.indexOf(i) === -1) {   // dont think this works?
             return false;
           }
         }
@@ -57,23 +60,25 @@ function getRow(puzzle, row) {
         return true;
       }
       
-      function sudokuIsValid(puzzle) {
-        let checks = [];
-      
-        for(let i = 0; i < 9; i++) {
-          checks.push(getRow(puzzle, i));
-          checks.push(getColumn(puzzle, i));
-        }
-      
-        for(let i = 0; i < 3; i++) {
-          for(let j = 0; j < 3; j++) {
-            checks.push(getSection(puzzle, i, j));
+      function sudokuIsValid(puzzle) {    
+          let checks = [];   // should I have 3 different checks?
+        
+          for(let i = 0; i < 9; i++) {
+            checks.push(getRow(puzzle, i));   // get every row
+            checks.push(getColumn(puzzle, i));   // get every column
           }
-        }
-      
-        for(let i = 0; i < checks.length; i++) {
-          if(!includes1to9(checks[i])) { return false; }
-        }
+        
+          for(let i = 0; i < 3; i++) {
+            for(let j = 0; j < 3; j++) {
+              checks.push(getSection(puzzle, i, j));  // get every section
+            }
+          }
+        
+          for(let i = 0; i < checks.length; i++) {
+            if(!includes1to9(checks[i])) { 
+              return false; 
+            }   // check every array?
+          }
       
         return true;
       }
